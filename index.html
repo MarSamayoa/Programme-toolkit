@@ -449,7 +449,7 @@ function renderRiskMatrix(){
   for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+matColors[row][col]+'" opacity=".18" rx="4"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="'+matColors[row][col]+'" stroke-width="1.5" stroke-opacity=".35" rx="4"/>';}
   var impLabels=['Low','Medium','High'];var likLabels=['High','Medium','Low'];
   for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">'+impLabels[col]+'</text>';}
-  svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H+2)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8">IMPACT →</text>';
+  svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8">IMPACT →</text>';
   for(var row=0;row<3;row++){svg+='<text x="'+(pad.left-8)+'" y="'+(pad.top+row*cellH+cellH/2+4)+'" text-anchor="end" font-size="11" font-weight="600" fill="#64748b">'+likLabels[row]+'</text>';}
   var lyMid=pad.top+gridH/2;svg+='<text x="22" y="'+lyMid+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8" transform="rotate(-90,22,'+lyMid+')">LIKELIHOOD →</text>';
   // Place risk dots
