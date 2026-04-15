@@ -408,14 +408,14 @@ var hmCellColors=['#e67e22','#f1c40f','#27ae60','#c0392b','#e67e22','#a5d65b','#
 
 function renderHeatmapSVG(){
   var wrap=document.getElementById('heatmap-svg-wrap');var W=wrap.offsetWidth||440;
-  var pad={top:36,right:20,bottom:56,left:80};var gridW=W-pad.left-pad.right;var gridH=280;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var pad={top:36,right:20,bottom:56,left:85};var gridW=W-pad.left-pad.right;var gridH=280;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
   var colLabels=['Complex','Intermediate','Simple'];var rowLabels=['High','Medium','Low'];var colHeaders=['Long Term','Medium Term','Quick Wins'];
   var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
   for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+hmCellColors[row*3+col]+'" opacity=".85"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="#fff" stroke-width="2"/>';}
   for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(pad.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#64748b">'+colHeaders[col]+'</text>';}
   for(var row=0;row<3;row++){svg+='<text x="'+(pad.left-8)+'" y="'+(pad.top+row*cellH+cellH/2+4)+'" text-anchor="end" font-size="11" font-weight="500" fill="#64748b">'+rowLabels[row]+'</text>';}
   svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+('var(--accent-mid)')+'">Complexity →</text>';
-  var yMid=pad.top+gridH/2;svg+='<text x="24" y="'+yMid+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent-mid)" transform="rotate(-90,24,'+yMid+')">Benefit →</text>';
+  var yMid=pad.top+gridH/2;svg+='<text x="28" y="'+yMid+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent-mid)" transform="rotate(-90,28,'+yMid+')">Benefit →</text>';
   for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(pad.top+gridH+16)+'" text-anchor="middle" font-size="10" fill="#94a3b8">'+colLabels[col]+'</text>';}
   var slots={};hmItems.forEach(function(h,i){var row=3-h.benefit;var svgCol=2-(h.complexity-1);var key=row+','+svgCol;if(!slots[key])slots[key]=[];slots[key].push(i);});
   Object.keys(slots).forEach(function(key){var parts=key.split(',');var row=+parts[0],col=+parts[1];var items=slots[key];var bx=pad.left+col*cellW;var by=pad.top+row*cellH;var n=items.length;
@@ -443,7 +443,7 @@ function riskColor(l,i){var s=l*i;if(s>=9)return'#dc2626';if(s>=6)return'#f97316
 
 function renderRiskMatrix(){
   var wrap=document.getElementById('risk-matrix-svg');var W=wrap.offsetWidth||400;
-  var pad={top:10,right:10,bottom:44,left:72};var gridW=W-pad.left-pad.right;var gridH=240;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var pad={top:10,right:10,bottom:44,left:77};var gridW=W-pad.left-pad.right;var gridH=240;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
   var matColors=[['#eab308','#f97316','#dc2626'],['#22c55e','#eab308','#f97316'],['#22c55e','#22c55e','#eab308']];
   var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
   for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+matColors[row][col]+'" opacity=".18" rx="4"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="'+matColors[row][col]+'" stroke-width="1.5" stroke-opacity=".35" rx="4"/>';}
@@ -451,7 +451,7 @@ function renderRiskMatrix(){
   for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">'+impLabels[col]+'</text>';}
   svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H+2)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8">IMPACT →</text>';
   for(var row=0;row<3;row++){svg+='<text x="'+(pad.left-8)+'" y="'+(pad.top+row*cellH+cellH/2+4)+'" text-anchor="end" font-size="11" font-weight="600" fill="#64748b">'+likLabels[row]+'</text>';}
-  var lyMid=pad.top+gridH/2;svg+='<text x="20" y="'+lyMid+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8" transform="rotate(-90,20,'+lyMid+')">LIKELIHOOD →</text>';
+  var lyMid=pad.top+gridH/2;svg+='<text x="22" y="'+lyMid+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8" transform="rotate(-90,22,'+lyMid+')">LIKELIHOOD →</text>';
   // Place risk dots
   var openRisks=risks.filter(function(r){return r.status!=='closed';});
   var rSlots={};openRisks.forEach(function(r,i){var row=3-r.likelihood;var col=r.impact-1;var key=row+','+col;if(!rSlots[key])rSlots[key]=[];rSlots[key].push(r);});
