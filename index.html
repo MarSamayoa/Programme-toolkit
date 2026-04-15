@@ -408,7 +408,7 @@ var hmCellColors=['#e67e22','#f1c40f','#27ae60','#c0392b','#e67e22','#a5d65b','#
 
 function renderHeatmapSVG(){
   var wrap=document.getElementById('heatmap-svg-wrap');var W=wrap.offsetWidth||440;
-  var pad={top:36,right:20,bottom:56,left:72};var gridW=W-pad.left-pad.right;var gridH=280;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var pad={top:36,right:20,bottom:56,left:80};var gridW=W-pad.left-pad.right;var gridH=280;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
   var colLabels=['Complex','Intermediate','Simple'];var rowLabels=['High','Medium','Low'];var colHeaders=['Long Term','Medium Term','Quick Wins'];
   var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
   for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+hmCellColors[row*3+col]+'" opacity=".85"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="#fff" stroke-width="2"/>';}
@@ -443,7 +443,7 @@ function riskColor(l,i){var s=l*i;if(s>=9)return'#dc2626';if(s>=6)return'#f97316
 
 function renderRiskMatrix(){
   var wrap=document.getElementById('risk-matrix-svg');var W=wrap.offsetWidth||400;
-  var pad={top:10,right:10,bottom:44,left:68};var gridW=W-pad.left-pad.right;var gridH=240;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var pad={top:10,right:10,bottom:44,left:72};var gridW=W-pad.left-pad.right;var gridH=240;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
   var matColors=[['#eab308','#f97316','#dc2626'],['#22c55e','#eab308','#f97316'],['#22c55e','#22c55e','#eab308']];
   var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
   for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+matColors[row][col]+'" opacity=".18" rx="4"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="'+matColors[row][col]+'" stroke-width="1.5" stroke-opacity=".35" rx="4"/>';}
