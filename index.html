@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Toolkit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ink: #0f172a;
+  --ink-2: #334155;
+  --ink-3: #64748b;
+  --ink-4: #94a3b8;
+  --surface: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --accent: #0e7490;
+  --accent-deep: #0c3547;
+  --accent-mid: #155e75;
+  --accent-light: #22d3ee;
+  --accent-tint: #ecfeff;
+  --accent-border: #a5f3fc;
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --rose: #be123c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14px;min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+.header{background:linear-gradient(135deg,var(--accent-deep) 0%,var(--accent-mid) 60%,var(--accent) 100%);padding:28px 28px 24px;margin-bottom:24px;}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.header h1{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.header p{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:3px;}
+.header-actions{display:flex;gap:8px;}
+.ghost-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:12px;font-weight:600;padding:7px 16px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.ghost-btn:hover{background:rgba(255,255,255,.22);}
+
+.wrapper{max-width:1100px;margin:0 auto;padding:0 20px 48px;}
+
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;border:1px solid var(--border);margin-bottom:22px;overflow-x:auto;}
+.tab{padding:9px 18px;font-size:13px;font-weight:600;color:var(--ink-3);cursor:pointer;border:none;background:none;border-radius:8px;white-space:nowrap;transition:all .15s;flex-shrink:0;font-family:inherit;}
+.tab:hover{background:var(--accent-tint);color:var(--accent);}
+.tab.active{background:var(--accent-mid);color:#fff;box-shadow:0 2px 8px rgba(21,94,117,.3);}
+
+.panel{display:none;}.panel.active{display:block;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:16px;}
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.metric-label{font-size:10px;font-weight:700;color:var(--ink-4);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;}
+.metric-val{font-size:22px;font-weight:800;color:var(--ink);}
+.section-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.section-sub{font-size:12px;color:var(--ink-3);margin-top:-9px;margin-bottom:14px;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:var(--border-light);}
+th{text-align:left;font-weight:700;font-size:10px;color:var(--ink-4);text-transform:uppercase;letter-spacing:.6px;padding:9px 10px;border-bottom:1px solid var(--border);}
+td{padding:9px 10px;border-bottom:1px solid var(--border-light);color:var(--ink-2);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#f8fbfd;}
+
+input[type=text],input[type=number],input[type=date],select,textarea{font-size:13px;padding:6px 9px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--ink);width:100%;font-family:inherit;transition:border .15s,box-shadow .15s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,116,144,.1);}
+textarea{resize:vertical;min-height:56px;}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;}
+
+.add-btn{font-size:12px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;padding:6px 0;margin-top:8px;font-family:inherit;transition:color .15s;}
+.add-btn:hover{color:var(--accent-mid);}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--ink-4);font-size:15px;padding:2px 6px;line-height:1;border-radius:6px;transition:all .15s;font-family:inherit;}
+.del-btn:hover{color:var(--rose);background:#fff1f2;}
+
+.export-bar{display:flex;gap:6px;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-light);flex-wrap:wrap;}
+.export-label{font-size:11px;font-weight:600;color:var(--ink-4);margin-right:2px;}
+.export-btn{font-size:11px;font-weight:600;padding:5px 12px;border:1px solid var(--border);border-radius:7px;background:var(--accent-tint);color:var(--accent-mid);cursor:pointer;transition:all .15s;font-family:inherit;}
+.export-btn:hover{background:var(--accent-border);border-color:var(--accent);}
+
+.progress-wrap{background:#d0edf2;border-radius:99px;height:7px;width:100%;margin-top:6px;overflow:hidden;}
+.progress-bar{border-radius:99px;height:7px;transition:width .4s,background .3s;}
+
+.radar-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+@media(max-width:640px){.radar-wrap{grid-template-columns:1fr;}}
+.radar-criteria{list-style:none;}
+.radar-criteria li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light);font-size:13px;color:var(--ink-2);}
+.radar-criteria li:last-child{border-bottom:none;}
+.rc-label{flex:1;}
+.rc-score{font-size:12px;font-weight:700;color:var(--accent);min-width:24px;text-align:right;}
+
+.raci-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:600;}
+.raci-pill-r{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;}
+.raci-pill-a{background:#fce7f3;color:#9d174d;border:1px solid #f9a8d4;}
+.raci-pill-c{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;}
+.raci-pill-i{background:#e0e7ff;color:#4338ca;border:1px solid #a5b4fc;}
+.raci-pill-none{background:var(--border-light);color:var(--ink-4);border:1px solid var(--border);}
+.raci-key{font-weight:800;font-size:14px;letter-spacing:.3px;}
+.raci-cell{width:52px;height:36px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;letter-spacing:.3px;user-select:none;}
+.raci-cell:hover{transform:scale(1.08);box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.raci-cell-r{background:#2563eb;color:#fff;}
+.raci-cell-a{background:#db2777;color:#fff;}
+.raci-cell-c{background:#d97706;color:#fff;}
+.raci-cell-i{background:#6366f1;color:#fff;}
+.raci-cell-none{background:var(--border-light);color:var(--ink-4);}
+
+.risk-matrix-wrap{position:relative;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>Programme Toolkit</h1>
+      <p>Score options, prioritise activities, track risks and budgets, assign responsibilities</p>
+    </div>
+    <div class="header-actions">
+      <button class="ghost-btn" onclick="clearAllExamples()">Clear examples</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+<div class="tabs">
+  <button class="tab active" onclick="showTab('radar',this)">Criteria scoring</button>
+  <button class="tab" onclick="showTab('heatmap',this)">Priority matrix</button>
+  <button class="tab" onclick="showTab('risk',this)">Risk matrix</button>
+  <button class="tab" onclick="showTab('budget',this)">Budget tracker</button>
+  <button class="tab" onclick="showTab('raci',this)">RACI</button>
+</div>
+
+<!-- ═══ CRITERIA SCORING ═══ -->
+<div id="tab-radar" class="panel active">
+  <div class="card" style="margin-bottom:16px">
+    <div class="section-title">Compare options across weighted criteria</div>
+    <div class="section-sub" style="margin-top:-10px;margin-bottom:0">Define the criteria that matter for your decision, name the options you're evaluating, then score each option 1–5. The radar chart and summary update as you type.</div>
+  </div>
+  <div class="card">
+    <div class="radar-wrap">
+      <div style="position:relative;height:360px"><canvas id="radarChart"></canvas></div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">Best performer per criterion</div>
+        <ul class="radar-criteria" id="radar-summary"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink)">Score table</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="radar-new-crit" placeholder="New criterion name…" style="max-width:220px;font-size:12px">
+        <button class="add-btn" onclick="addCriterion()" style="margin-top:0;padding:6px 14px;border:1px solid var(--border);border-radius:8px;background:var(--accent-tint)">+ Add</button>
+      </div>
+    </div>
+    <div id="radar-scores-table" style="overflow-x:auto"></div>
+  </div>
+</div>
+
+<!-- ═══ PRIORITY MATRIX ═══ -->
+<div id="tab-heatmap" class="panel">
+  <div class="card" style="margin-bottom:16px">
+    <div class="section-title">Prioritise activities by benefit vs. complexity</div>
+    <div class="section-sub" style="margin-top:-10px;margin-bottom:0">Rate each activity on benefit (how much value it creates) and complexity (how hard it is to deliver). The matrix auto-sorts them into Quick Win, Medium Term, Long Term, or Avoid zones.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card" style="height:fit-content">
+      <div class="section-title">Activities</div>
+      <div class="section-sub">Set benefit (high = good) and complexity (high = hard).</div>
+      <div style="display:grid;grid-template-columns:1fr 80px 80px 28px;gap:6px;align-items:center;margin-bottom:6px;padding:0 2px">
+        <span style="font-size:10px;font-weight:700;color:var(--ink-4);text-transform:uppercase;letter-spacing:.5px">Activity</span>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-4);text-transform:uppercase;letter-spacing:.5px;text-align:center">Benefit</span>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-4);text-transform:uppercase;letter-spacing:.5px;text-align:center">Complexity</span>
+        <span></span>
+      </div>
+      <div id="hm-items"></div>
+      <button class="add-btn" onclick="addHmItem()">+ Add activity</button>
+    </div>
+    <div class="card">
+      <div class="section-title">Priority matrix</div>
+      <div class="section-sub">High benefit + low complexity = Quick Win. High complexity + low benefit = Avoid.</div>
+      <div id="heatmap-svg-wrap"></div>
+      <div style="margin-top:14px;overflow-x:auto">
+        <table><thead><tr style="background:var(--border-light)">
+          <th>Zone</th><th>Activities</th>
+        </tr></thead><tbody id="hm-zone-table"></tbody></table>
+      </div>
+      <div class="export-bar">
+        <span class="export-label">Export:</span>
+        <button class="export-btn" onclick="exportCSV('heatmap')">CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RISK MATRIX ═══ -->
+<div id="tab-risk" class="panel">
+  <div class="card" style="margin-bottom:16px">
+    <div class="section-title">Map and track programme risks</div>
+    <div class="section-sub" style="margin-top:-10px;margin-bottom:0">Log risks in the register below with likelihood and impact scores. They automatically appear on the matrix. Metrics update live — open risks, severity counts, and overdue mitigations.</div>
+  </div>
+  <div class="metric-row">
+    <div class="metric"><div class="metric-label">Open risks</div><div class="metric-val" id="risk-count">0</div></div>
+    <div class="metric"><div class="metric-label">High / Very high</div><div class="metric-val" id="high-risk-count" style="color:var(--red)">0</div></div>
+    <div class="metric"><div class="metric-label">Overdue mitigations</div><div class="metric-val" id="overdue-count" style="color:var(--amber)">0</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card">
+      <div class="section-title">Risk matrix</div>
+      <div class="section-sub">Likelihood × Impact grid. Risks are auto-placed based on scores below.</div>
+      <div id="risk-matrix-svg"></div>
+    </div>
+    <div class="card" style="height:fit-content">
+      <div class="section-title">Matrix legend</div>
+      <div style="display:grid;gap:6px;font-size:12px;color:var(--ink-2)">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#dc2626;flex-shrink:0"></span><strong>Critical</strong> — High likelihood + High impact</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#f97316;flex-shrink:0"></span><strong>Serious</strong> — Needs active mitigation</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#eab308;flex-shrink:0"></span><strong>Moderate</strong> — Monitor and plan</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#22c55e;flex-shrink:0"></span><strong>Low</strong> — Accept or watch</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <div class="section-title">Risk register</div>
+    <table>
+      <thead><tr><th style="width:30px">#</th><th>Risk</th><th>Mitigating actions</th><th style="width:90px">Owner</th><th style="width:80px">Likelihood</th><th style="width:80px">Impact</th><th style="width:105px">Status</th><th style="width:115px">Due date</th><th style="width:28px"></th></tr></thead>
+      <tbody id="risk-body"></tbody>
+    </table>
+    <button class="add-btn" onclick="addRisk()">+ Add risk</button>
+    <div class="export-bar">
+      <span class="export-label">Export:</span>
+      <button class="export-btn" onclick="exportCSV('risks')">CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BUDGET ═══ -->
+<div id="tab-budget" class="panel">
+  <div class="card" style="margin-bottom:16px">
+    <div class="section-title">Track budget allocation and spend</div>
+    <div class="section-sub" style="margin-top:-10px;margin-bottom:0">Enter budget lines with approved amounts, actual spend, and forecasts. Utilisation percentage and the chart update automatically.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div>
+      <div class="metric-row" style="margin-bottom:0">
+        <div class="metric"><div class="metric-label">Total approved</div><div class="metric-val" id="total-budget">$0k</div></div>
+        <div class="metric"><div class="metric-label">Spent to date</div><div class="metric-val" id="spent-budget" style="color:var(--accent-mid)">$0k</div></div>
+      </div>
+      <div class="metric-row" style="margin-bottom:0;margin-top:12px">
+        <div class="metric"><div class="metric-label">Forecast remaining</div><div class="metric-val" id="forecast-budget" style="color:var(--accent)">$0k</div></div>
+        <div class="metric">
+          <div class="metric-label">Utilisation</div>
+          <div class="metric-val" id="budget-pct">0%</div>
+          <div class="progress-wrap"><div class="progress-bar" id="budget-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">Spend chart</div>
+      <div style="position:relative;height:180px"><canvas id="budgetChart"></canvas></div>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <div class="section-title">Budget breakdown</div>
+    <table>
+      <thead><tr><th style="width:30px">#</th><th>Line item</th><th style="width:115px">Start</th><th style="width:115px">End</th><th style="width:90px">Budget ($k)</th><th style="width:80px">Spent ($k)</th><th style="width:90px">Forecast ($k)</th><th style="width:28px"></th></tr></thead>
+      <tbody id="budget-body"></tbody>
+    </table>
+    <button class="add-btn" onclick="addBudgetRow()">+ Add line item</button>
+    <div class="export-bar">
+      <span class="export-label">Export:</span>
+      <button class="export-btn" onclick="exportCSV('budget')">CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RACI ═══ -->
+<div id="tab-raci" class="panel">
+  <div class="card" style="margin-bottom:14px">
+    <div class="section-title">Assign responsibilities across teams</div>
+    <div class="section-sub" style="margin-top:-10px;margin-bottom:14px">Define who is Responsible, Accountable, Consulted, or Informed for each activity. Click any cell to cycle through roles.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="raci-pill raci-pill-r"><span class="raci-key">R</span> Responsible</span>
+      <span class="raci-pill raci-pill-a"><span class="raci-key">A</span> Accountable</span>
+      <span class="raci-pill raci-pill-c"><span class="raci-key">C</span> Consulted</span>
+      <span class="raci-pill raci-pill-i"><span class="raci-key">I</span> Informed</span>
+      <span class="raci-pill raci-pill-none"><span class="raci-key">—</span> Not involved</span>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <div id="raci-grid"></div>
+    <div style="display:flex;gap:14px;margin-top:12px">
+      <button class="add-btn" onclick="addRaciRow()">+ Add activity</button>
+      <button class="add-btn" onclick="addRaciCol()">+ Add team / unit</button>
+    </div>
+    <div class="export-bar">
+      <span class="export-label">Export:</span>
+      <button class="export-btn" onclick="exportCSV('raci')">CSV</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ═══ DATA ═══ */
+var radarCriteria=['Speed of disbursement','Grassroots reach','Fiduciary oversight','Learning quality','Power-shifting alignment','Cost efficiency'];
+var radarOptions=['Regranting Model','Direct Grants','Pooled Fund'];
+var radarScores=[[5,5,4,3,5,4],[2,3,3,5,2,2],[3,3,4,3,3,3]];
+var radarColors=['#0e7490','#155e75','#22a5c0'];
+
+var hmItems=[
+  {label:'Map and vet regional intermediaries',benefit:3,complexity:1},
+  {label:'Design sub-grant agreement template',benefit:3,complexity:1},
+  {label:'Develop shared M&E framework',benefit:3,complexity:2},
+  {label:'Rapid response fund mechanism',benefit:3,complexity:2},
+  {label:'Grantee capacity strengthening',benefit:2,complexity:2},
+  {label:'Cross-regional learning convening',benefit:2,complexity:3},
+  {label:'Real-time grant tracking dashboard',benefit:2,complexity:3},
+  {label:'Community-led accountability mechanism',benefit:3,complexity:3},
+  {label:'Donor co-funding coordination',benefit:2,complexity:2}
+];
+
+var risks=[
+  {id:1,desc:'Civic space restrictions tighten in target country',mit:'Activate rapid response protocol; consult legal advisors',owner:'Programme Dir.',likelihood:3,impact:3,status:'open',date:'2026-10-15'},
+  {id:2,desc:'Grantee capacity gaps affect reporting quality',mit:'Deploy capacity support; simplify reporting for small grants',owner:'M&E Lead',likelihood:2,impact:2,status:'open',date:'2026-11-01'},
+  {id:3,desc:'Co-funder withdraws from pooled learning budget',mit:'Identify alternative funding; reduce convening scope',owner:'Partnerships',likelihood:2,impact:3,status:'mitigated',date:'2026-09-30'},
+  {id:4,desc:'Currency fluctuation reduces real value of sub-grants',mit:'USD-denominated tranches or top-up mechanism',owner:'Finance',likelihood:2,impact:2,status:'open',date:'2026-12-01'},
+  {id:5,desc:'Intermediary staff turnover disrupts grant cycle',mit:'Cross-train staff; maintain knowledge documentation',owner:'Programme Dir.',likelihood:1,impact:2,status:'open',date:'2027-01-15'}
+];
+
+var budget=[
+  {name:'Programme design & intermediary setup',start:'2026-09-01',end:'2026-09-30',budg:120,spent:110,fore:10},
+  {name:'Sub-grants — West Africa',start:'2026-10-01',end:'2027-09-30',budg:1200,spent:180,fore:1020},
+  {name:'Sub-grants — Southeast Asia',start:'2026-10-01',end:'2027-09-30',budg:1100,spent:150,fore:950},
+  {name:'Sub-grants — Latin America',start:'2026-11-01',end:'2027-09-30',budg:900,spent:0,fore:900},
+  {name:'M&E, learning & convenings',start:'2026-10-01',end:'2027-09-30',budg:400,spent:45,fore:355},
+  {name:'Programme management & overhead',start:'2026-09-01',end:'2027-09-30',budg:280,spent:65,fore:215}
+];
+
+var raciTeams=['Programme Unit','Intermediaries','M&E Team','Legal & Compliance','Finance'];
+var raciRows=[
+  {stream:'Design',activity:'Theory of change finalisation',cells:['A','C','R','I','I']},
+  {stream:'Grantmaking',activity:'Sub-grant due diligence',cells:['C','R','I','A','C']},
+  {stream:'Grantmaking',activity:'Grant disbursement approval',cells:['A','I','I','C','R']},
+  {stream:'Learning',activity:'Grantee convenings',cells:['A','C','R','I','I']},
+  {stream:'Reporting',activity:'Board progress report',cells:['A','C','R','C','C']},
+  {stream:'Compliance',activity:'Audit & risk review',cells:['C','I','I','A','R']}
+];
+
+/* ═══ UTILITIES ═══ */
+function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function showTab(t,el){
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='radar'){renderRadarChart();renderRadarScores();}
+  if(t==='heatmap'){renderHeatmapSVG();}
+  if(t==='risk'){renderRisks();renderRiskMatrix();}
+  if(t==='budget'){renderBudgetChart();}
+  if(t==='raci'){renderRaci();}
+}
+
+function clearAllExamples(){
+  if(!confirm('Clear all example data? This cannot be undone.'))return;
+  radarCriteria=[];radarOptions=[];radarScores=[];
+  hmItems=[];risks=[];budget=[];raciTeams=[];raciRows=[];
+  renderRadarScores();if(radarChartInst){radarChartInst.destroy();radarChartInst=null;}
+  renderHmItems();renderHeatmapSVG();renderRisks();renderRiskMatrix();
+  renderBudget();if(budgetChartInstance){budgetChartInstance.destroy();budgetChartInstance=null;}
+  renderRaci();
+}
+
+/* ═══ CRITERIA SCORING (RADAR) ═══ */
+var radarChartInst=null;
+
+function renderRadarScores(){
+  document.getElementById('radar-scores-table').innerHTML='<table><thead><tr><th style="min-width:160px">Criterion</th>'+
+    radarOptions.map(function(o,i){return'<th style="width:120px"><input type="text" value="'+esc(o)+'" onchange="radarOptions['+i+']=this.value;renderRadarChart();renderRadarScores()" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-4);border:none;background:none;padding:0"></th>';}).join('')+
+    '<th style="width:28px"></th></tr></thead><tbody>'+
+    radarCriteria.map(function(c,i){
+      return '<tr><td><input type="text" value="'+esc(c)+'" onchange="radarCriteria['+i+']=this.value;renderRadarChart();renderRadarSummary()" style="min-width:140px"></td>'+
+        radarOptions.map(function(o,j){
+          return '<td style="text-align:center"><input type="number" min="1" max="5" value="'+(radarScores[j]&&radarScores[j][i]||1)+'" onchange="if(!radarScores['+j+'])radarScores['+j+']=[];radarScores['+j+']['+i+']=+this.value;renderRadarChart();renderRadarSummary()" style="width:52px;text-align:center"></td>';
+        }).join('')+
+        '<td><button class="del-btn" onclick="radarCriteria.splice('+i+',1);radarScores.forEach(function(s){s.splice('+i+',1)});renderRadarScores();renderRadarChart()">×</button></td></tr>';
+    }).join('')+'</tbody></table>';
+  renderRadarSummary();
+}
+function addCriterion(){var v=document.getElementById('radar-new-crit').value.trim();if(!v)return;radarCriteria.push(v);radarScores.forEach(function(s){s.push(3);});document.getElementById('radar-new-crit').value='';renderRadarScores();renderRadarChart();}
+function renderRadarSummary(){
+  var list=document.getElementById('radar-summary');if(!list)return;
+  list.innerHTML=radarCriteria.map(function(c,i){var best=0,bestOpt='';radarOptions.forEach(function(o,j){if((radarScores[j]||[])[i]>best){best=(radarScores[j]||[])[i];bestOpt=o;}});return'<li><span class="rc-label">'+esc(c)+'</span><span class="rc-score">'+esc(bestOpt)+' ('+best+')</span></li>';}).join('');
+}
+function renderRadarChart(){
+  if(radarChartInst){radarChartInst.destroy();radarChartInst=null;}
+  var ctx=document.getElementById('radarChart');if(!ctx||!radarCriteria.length)return;
+  radarChartInst=new Chart(ctx,{type:'radar',data:{labels:radarCriteria,datasets:radarOptions.map(function(o,i){return{label:o,data:(radarScores[i]||[]).slice(0,radarCriteria.length),borderColor:radarColors[i%radarColors.length],backgroundColor:radarColors[i%radarColors.length]+'28',borderWidth:2,pointBackgroundColor:radarColors[i%radarColors.length],pointRadius:4};})},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:12,family:'DM Sans,system-ui'},color:'var(--ink-3)',usePointStyle:true,pointStyle:'circle'}}},scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:10},color:'#94a3b8',backdropColor:'transparent'},grid:{color:'rgba(14,116,144,.12)'},angleLines:{color:'rgba(14,116,144,.15)'},pointLabels:{font:{size:11,family:'DM Sans,system-ui'},color:'var(--ink-2)'}}}}});
+}
+
+/* ═══ PRIORITY MATRIX (HEATMAP) ═══ */
+function hmZoneLabel(b,c){if(b===3&&c<=2)return'Quick win';if(b===3&&c===3)return'Long term';if(b===2&&c===1)return'Quick win';if(b===2&&c===2)return'Medium term';if(b===2&&c===3)return'Long term';if(b===1&&c===1)return'Medium term';return'Avoid';}
+var hmCellColors=['#e67e22','#f1c40f','#27ae60','#c0392b','#e67e22','#a5d65b','#c0392b','#c0392b','#e67e22'];
+
+function renderHeatmapSVG(){
+  var wrap=document.getElementById('heatmap-svg-wrap');var W=wrap.offsetWidth||440;
+  var pad={top:36,right:20,bottom:56,left:56};var gridW=W-pad.left-pad.right;var gridH=280;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var colLabels=['Complex','Intermediate','Simple'];var rowLabels=['High','Medium','Low'];var colHeaders=['Long Term','Medium Term','Quick Wins'];
+  var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
+  for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+hmCellColors[row*3+col]+'" opacity=".85"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="#fff" stroke-width="2"/>';}
+  for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(pad.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#64748b">'+colHeaders[col]+'</text>';}
+  for(var row=0;row<3;row++){svg+='<text x="'+(pad.left-8)+'" y="'+(pad.top+row*cellH+cellH/2+4)+'" text-anchor="end" font-size="11" font-weight="500" fill="#64748b">'+rowLabels[row]+'</text>';}
+  svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+('var(--accent-mid)')+'">Complexity →</text>';
+  var yMid=pad.top+gridH/2;svg+='<text x="14" y="'+yMid+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent-mid)" transform="rotate(-90,14,'+yMid+')">Benefit →</text>';
+  for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(pad.top+gridH+16)+'" text-anchor="middle" font-size="10" fill="#94a3b8">'+colLabels[col]+'</text>';}
+  var slots={};hmItems.forEach(function(h,i){var row=3-h.benefit;var svgCol=2-(h.complexity-1);var key=row+','+svgCol;if(!slots[key])slots[key]=[];slots[key].push(i);});
+  Object.keys(slots).forEach(function(key){var parts=key.split(',');var row=+parts[0],col=+parts[1];var items=slots[key];var bx=pad.left+col*cellW;var by=pad.top+row*cellH;var n=items.length;
+    items.forEach(function(idx,k){var offX=(n>1)?((k%2)*cellW*.5+cellW*.25):cellW/2;var offY=(n>2)?((Math.floor(k/2)*cellH*.5+cellH*.25)):cellH/2;if(n===2)offY=cellH/2;var cx=bx+offX;var cy=by+offY;
+      svg+='<circle cx="'+cx+'" cy="'+cy+'" r="17" fill="#0c3547" opacity=".9"/><text x="'+cx+'" y="'+(cy+5)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">'+(idx+1)+'</text>';});});
+  svg+='</svg>';wrap.innerHTML=svg;renderHmZoneTable();
+}
+function renderHmItems(){
+  document.getElementById('hm-items').innerHTML=hmItems.map(function(h,i){
+    return'<div style="display:grid;grid-template-columns:1fr 80px 80px 28px;gap:6px;align-items:center;margin-bottom:7px"><div style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:22px;border-radius:50%;background:#0c3547;color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">'+(i+1)+'</span><input type="text" value="'+esc(h.label)+'" onchange="hmItems['+i+'].label=this.value;renderHeatmapSVG()"></div><select onchange="hmItems['+i+'].benefit=+this.value;renderHeatmapSVG()">'+ [3,2,1].map(function(v){return'<option value="'+v+'"'+(h.benefit==v?' selected':'')+'>'+['','Low','Medium','High'][v]+'</option>';}).join('')+'</select><select onchange="hmItems['+i+'].complexity=+this.value;renderHeatmapSVG()">'+ [1,2,3].map(function(v){return'<option value="'+v+'"'+(h.complexity==v?' selected':'')+'>'+['','Simple','Medium','Complex'][v]+'</option>';}).join('')+'</select><button class="del-btn" onclick="hmItems.splice('+i+',1);renderHmItems();renderHeatmapSVG()">×</button></div>';
+  }).join('');
+}
+function addHmItem(){hmItems.push({label:'New activity',benefit:2,complexity:2});renderHmItems();renderHeatmapSVG();}
+function renderHmZoneTable(){
+  var zones={'Quick win':[],'Medium term':[],'Long term':[],'Avoid':[]};hmItems.forEach(function(h,i){var z=hmZoneLabel(h.benefit,h.complexity);if(zones[z])zones[z].push((i+1)+'. '+h.label);});
+  document.getElementById('hm-zone-table').innerHTML=Object.keys(zones).map(function(z){var dots={'Quick win':'#27ae60','Medium term':'#f1c40f','Long term':'#e67e22','Avoid':'#c0392b'};return'<tr><td style="padding:7px 10px;border-bottom:1px solid var(--border-light);font-weight:600;white-space:nowrap"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+dots[z]+';margin-right:7px;vertical-align:middle"></span>'+z+'</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-light);color:var(--ink-2)">'+(zones[z].length?zones[z].join(', '):'—')+'</td></tr>';}).join('');
+}
+
+/* ═══ RISK MATRIX ═══ */
+var likOpts=[['3','High'],['2','Medium'],['1','Low']];
+var impOpts=[['3','High'],['2','Medium'],['1','Low']];
+var statOpts=[['open','Open'],['mitigated','Mitigated'],['closed','Closed']];
+
+function riskColor(l,i){var s=l*i;if(s>=9)return'#dc2626';if(s>=6)return'#f97316';if(s>=3)return'#eab308';return'#22c55e';}
+
+function renderRiskMatrix(){
+  var wrap=document.getElementById('risk-matrix-svg');var W=wrap.offsetWidth||400;
+  var pad={top:10,right:10,bottom:44,left:52};var gridW=W-pad.left-pad.right;var gridH=240;var cellW=gridW/3;var cellH=gridH/3;var H=gridH+pad.top+pad.bottom;
+  var matColors=[['#eab308','#f97316','#dc2626'],['#22c55e','#eab308','#f97316'],['#22c55e','#22c55e','#eab308']];
+  var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,system-ui;display:block">';
+  for(var row=0;row<3;row++)for(var col=0;col<3;col++){var x=pad.left+col*cellW;var y=pad.top+row*cellH;svg+='<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="'+matColors[row][col]+'" opacity=".18" rx="4"/><rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" fill="none" stroke="'+matColors[row][col]+'" stroke-width="1.5" stroke-opacity=".35" rx="4"/>';}
+  var impLabels=['Low','Medium','High'];var likLabels=['High','Medium','Low'];
+  for(var col=0;col<3;col++){svg+='<text x="'+(pad.left+col*cellW+cellW/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">'+impLabels[col]+'</text>';}
+  svg+='<text x="'+(pad.left+gridW/2)+'" y="'+(H+2)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8">IMPACT →</text>';
+  for(var row=0;row<3;row++){svg+='<text x="'+(pad.left-8)+'" y="'+(pad.top+row*cellH+cellH/2+4)+'" text-anchor="end" font-size="11" font-weight="600" fill="#64748b">'+likLabels[row]+'</text>';}
+  var lyMid=pad.top+gridH/2;svg+='<text x="10" y="'+lyMid+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8" transform="rotate(-90,10,'+lyMid+')">LIKELIHOOD →</text>';
+  // Place risk dots
+  var openRisks=risks.filter(function(r){return r.status!=='closed';});
+  var rSlots={};openRisks.forEach(function(r,i){var row=3-r.likelihood;var col=r.impact-1;var key=row+','+col;if(!rSlots[key])rSlots[key]=[];rSlots[key].push(r);});
+  Object.keys(rSlots).forEach(function(key){var parts=key.split(',');var row=+parts[0],col=+parts[1];var items=rSlots[key];var bx=pad.left+col*cellW;var by=pad.top+row*cellH;var n=items.length;
+    items.forEach(function(r,k){var offX=(n>1)?((k%2)*cellW*.45+cellW*.28):cellW/2;var offY=(n>2)?((Math.floor(k/2)*cellH*.45+cellH*.28)):cellH/2;if(n===2)offY=cellH/2;
+      var cx=bx+offX;var cy=by+offY;var rc=riskColor(r.likelihood,r.impact);var idx=risks.indexOf(r)+1;
+      svg+='<circle cx="'+cx+'" cy="'+cy+'" r="16" fill="'+rc+'" opacity=".92"/><text x="'+cx+'" y="'+(cy+5)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">'+idx+'</text>';});});
+  svg+='</svg>';wrap.innerHTML=svg;
+}
+
+function renderRisks(){
+  document.getElementById('risk-body').innerHTML=risks.map(function(r,i){
+    return'<tr><td style="color:var(--ink-4);font-size:12px;font-weight:700">'+(i+1)+'</td><td><input type="text" value="'+esc(r.desc)+'" onchange="risks['+i+'].desc=this.value" style="min-width:150px"></td><td><input type="text" value="'+esc(r.mit)+'" onchange="risks['+i+'].mit=this.value" style="min-width:120px"></td><td><input type="text" value="'+esc(r.owner)+'" onchange="risks['+i+'].owner=this.value"></td><td><select onchange="risks['+i+'].likelihood=+this.value;renderRisks();renderRiskMatrix()">'+likOpts.map(function(o){return'<option value="'+o[0]+'"'+(r.likelihood==+o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td><td><select onchange="risks['+i+'].impact=+this.value;renderRisks();renderRiskMatrix()">'+impOpts.map(function(o){return'<option value="'+o[0]+'"'+(r.impact==+o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td><td><select onchange="risks['+i+'].status=this.value;renderRisks();renderRiskMatrix()">'+statOpts.map(function(o){return'<option value="'+o[0]+'"'+(r.status==o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td><td><input type="date" value="'+r.date+'" onchange="risks['+i+'].date=this.value;renderRisks()"></td><td><button class="del-btn" onclick="risks.splice('+i+',1);renderRisks();renderRiskMatrix()">×</button></td></tr>';
+  }).join('');
+  var open=risks.filter(function(r){return r.status==='open';}).length;
+  var high=risks.filter(function(r){return r.status==='open'&&(r.likelihood*r.impact>=6);}).length;
+  var today=new Date().toISOString().slice(0,10);
+  var over=risks.filter(function(r){return r.status==='open'&&r.date&&r.date<today;}).length;
+  document.getElementById('risk-count').textContent=open;
+  document.getElementById('high-risk-count').textContent=high;
+  document.getElementById('overdue-count').textContent=over;
+}
+function addRisk(){risks.push({id:Date.now(),desc:'New risk',mit:'',owner:'',likelihood:2,impact:2,status:'open',date:''});renderRisks();renderRiskMatrix();}
+
+/* ═══ BUDGET ═══ */
+var budgetChartInstance=null;
+function renderBudget(){
+  var total=0,spent=0,fore=0;
+  document.getElementById('budget-body').innerHTML=budget.map(function(d,i){
+    total+=Number(d.budg)||0;spent+=Number(d.spent)||0;fore+=Number(d.fore)||0;
+    return'<tr><td style="color:var(--ink-4);font-size:12px;font-weight:700">'+(i+1)+'</td><td><input type="text" value="'+esc(d.name)+'" onchange="budget['+i+'].name=this.value;renderBudget()" style="min-width:150px"></td><td><input type="date" value="'+d.start+'" onchange="budget['+i+'].start=this.value"></td><td><input type="date" value="'+d.end+'" onchange="budget['+i+'].end=this.value"></td><td><input type="text" value="'+d.budg+'" onchange="budget['+i+'].budg=this.value;renderBudget()" style="width:70px"></td><td><input type="text" value="'+d.spent+'" onchange="budget['+i+'].spent=this.value;renderBudget()" style="width:60px"></td><td><input type="text" value="'+d.fore+'" onchange="budget['+i+'].fore=this.value;renderBudget()" style="width:70px"></td><td><button class="del-btn" onclick="budget.splice('+i+',1);renderBudget()">×</button></td></tr>';
+  }).join('');
+  document.getElementById('total-budget').textContent='$'+total+'k';
+  document.getElementById('spent-budget').textContent='$'+spent+'k';
+  document.getElementById('forecast-budget').textContent='$'+fore+'k';
+  var pct=total>0?Math.round(spent/total*100):0;
+  document.getElementById('budget-pct').textContent=pct+'%';
+  document.getElementById('budget-bar').style.width=pct+'%';
+  document.getElementById('budget-bar').style.background=pct>90?'#dc2626':pct>70?'#d97706':'var(--accent)';
+}
+function addBudgetRow(){budget.push({name:'New line item',start:'',end:'',budg:0,spent:0,fore:0});renderBudget();}
+function renderBudgetChart(){
+  renderBudget();
+  if(budgetChartInstance)budgetChartInstance.destroy();
+  budgetChartInstance=new Chart(document.getElementById('budgetChart').getContext('2d'),{type:'bar',data:{labels:budget.map(function(b){return b.name;}),datasets:[{label:'Budget',data:budget.map(function(b){return Number(b.budg)||0;}),backgroundColor:'#a5e8f0',borderRadius:4,borderSkipped:false},{label:'Spent',data:budget.map(function(b){return Number(b.spent)||0;}),backgroundColor:'#0e7490',borderRadius:4,borderSkipped:false},{label:'Forecast',data:budget.map(function(b){return Number(b.fore)||0;}),backgroundColor:'#67c8d8',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,pointStyle:'rect',padding:16,font:{size:12,family:'DM Sans,system-ui'},color:'var(--ink-3)'}}},scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#94a3b8',maxRotation:45}},y:{ticks:{callback:function(v){return'$'+v+'k';},font:{size:11},color:'#94a3b8'},grid:{color:'rgba(14,116,144,.06)'}}}}});
+}
+
+/* ═══ RACI ═══ */
+var raciCycle=['R','A','C','I','—'];
+var raciCellMap={
+  'R':{cls:'raci-cell-r',label:'R'},
+  'A':{cls:'raci-cell-a',label:'A'},
+  'C':{cls:'raci-cell-c',label:'C'},
+  'I':{cls:'raci-cell-i',label:'I'},
+  '—':{cls:'raci-cell-none',label:'—'}
+};
+function cycleRaci(ri,ci){
+  var cur=raciRows[ri].cells[ci]||'—';
+  var idx=raciCycle.indexOf(cur);
+  raciRows[ri].cells[ci]=raciCycle[(idx+1)%raciCycle.length];
+  renderRaci();
+}
+function renderRaci(){
+  var colCount=raciTeams.length;
+  var html='<table style="min-width:'+(300+colCount*70)+'px;border-collapse:separate;border-spacing:0">';
+  // Header
+  html+='<thead><tr><th style="min-width:90px;background:var(--border-light);border-radius:10px 0 0 0">Stream</th><th style="min-width:130px;background:var(--border-light)">Activity</th>';
+  raciTeams.forEach(function(t,i){
+    html+='<th style="text-align:center;background:var(--border-light);min-width:70px;padding:8px 4px"><input type="text" value="'+esc(t)+'" onchange="raciTeams['+i+']=this.value;renderRaci()" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);border:none;background:none;padding:0;text-align:center;width:100%"></th>';
+  });
+  html+='<th style="width:28px;background:var(--border-light);border-radius:0 10px 0 0"></th></tr></thead>';
+  // Body
+  html+='<tbody>';
+  var lastStream='';
+  raciRows.forEach(function(r,i){
+    var showStream=r.stream!==lastStream;
+    lastStream=r.stream;
+    html+='<tr>';
+    // Stream cell — show input only on first row of that stream, span visually
+    html+='<td style="padding:8px 10px;border-bottom:1px solid var(--border-light);vertical-align:middle">';
+    if(showStream){
+      html+='<input type="text" value="'+esc(r.stream)+'" onchange="raciRows['+i+'].stream=this.value;renderRaci()" style="font-size:12px;font-weight:700;color:var(--ink);border:none;background:none;padding:0;width:100%">';
+    } else {
+      html+='<input type="text" value="'+esc(r.stream)+'" onchange="raciRows['+i+'].stream=this.value;renderRaci()" style="font-size:12px;font-weight:700;color:var(--ink-4);border:none;background:none;padding:0;width:100%">';
+    }
+    html+='</td>';
+    html+='<td style="padding:8px 10px;border-bottom:1px solid var(--border-light)"><input type="text" value="'+esc(r.activity)+'" onchange="raciRows['+i+'].activity=this.value" style="min-width:120px;font-size:13px"></td>';
+    raciTeams.forEach(function(t,j){
+      var v=r.cells[j]||'—';
+      var m=raciCellMap[v]||raciCellMap['—'];
+      html+='<td style="text-align:center;padding:6px 4px;border-bottom:1px solid var(--border-light)"><button class="raci-cell '+m.cls+'" onclick="cycleRaci('+i+','+j+')" title="Click to change">'+m.label+'</button></td>';
+    });
+    html+='<td style="border-bottom:1px solid var(--border-light);text-align:center"><button class="del-btn" onclick="raciRows.splice('+i+',1);renderRaci()">×</button></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('raci-grid').innerHTML=html;
+}
+function addRaciRow(){raciRows.push({stream:'',activity:'New activity',cells:raciTeams.map(function(){return'—';})});renderRaci();}
+function addRaciCol(){raciTeams.push('Team '+(raciTeams.length+1));raciRows.forEach(function(r){r.cells.push('—');});renderRaci();}
+
+/* ═══ EXPORT ═══ */
+function exportCSV(name){
+  var h=[],r=[];
+  if(name==='heatmap'){h=['"#"','"Activity"','"Benefit"','"Complexity"','"Zone"'];r=hmItems.map(function(i,j){return[(j+1),'"'+i.label+'"',i.benefit,i.complexity,'"'+hmZoneLabel(i.benefit,i.complexity)+'"'].join(',');});}
+  else if(name==='risks'){h=['"#"','"Risk"','"Mitigation"','"Owner"','"Likelihood"','"Impact"','"Status"','"Due"'];r=risks.map(function(d,j){return[(j+1),'"'+d.desc+'"','"'+d.mit+'"','"'+d.owner+'"',d.likelihood,d.impact,'"'+d.status+'"','"'+d.date+'"'].join(',');});}
+  else if(name==='budget'){h=['"#"','"Line Item"','"Start"','"End"','"Budget"','"Spent"','"Forecast"'];r=budget.map(function(d,j){return[(j+1),'"'+d.name+'"','"'+d.start+'"','"'+d.end+'"',d.budg,d.spent,d.fore].join(',');});}
+  else if(name==='raci'){h=['"Stream"','"Activity"'].concat(raciTeams.map(function(t){return'"'+t+'"';}));r=raciRows.map(function(d){return['"'+d.stream+'"','"'+d.activity+'"'].concat(d.cells.map(function(c){return'"'+c+'"';})).join(',');});}
+  var csv=[h.join(',')].concat(r).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=name+'.csv';a.click();
+}
+
+/* ═══ INIT ═══ */
+renderRadarScores();
+renderRadarChart();
+renderHmItems();
+setTimeout(renderHeatmapSVG,80);
+renderRisks();
+renderBudget();
+</script>
+</body>
+</html>
